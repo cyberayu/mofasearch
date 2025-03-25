@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "crawl4ai-connector"
+version = "0.0.1"
+authors = [
+    "Chgeng Chen"
+]
+description = "A user new crawl4ai-connector template"
+license = "MIT License"
+homepage = "https://github.com/moxin-org/mofa"
+documentation = "https://github.com/moxin-org/mofa/blob/main/README.md"
+readme = "README.md"
+packages = [{ include = "crawl4ai_connector" }]
+
+[tool.poetry.dependencies]
+pyarrow = ">= 5.0.0"
+crawl4ai = "*"
+beautifulsoup4 = "*"
+
+[tool.poetry.scripts]
+crawl4ai-connector = "crawl4ai_connector.main:main"
+
+[build-system]
+requires = ["poetry-core>=1.8.0"]
+build-backend = "poetry.core.masonry.api"
+

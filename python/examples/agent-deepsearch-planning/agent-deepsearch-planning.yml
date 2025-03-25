@@ -1,0 +1,61 @@
+nodes:
+  - id: terminal-input
+    build: pip install -e ../../node-hub/terminal-input
+    path: dynamic
+    outputs:
+      - data
+    inputs:
+      agent_planning_think: planning-agent/agent_planning_think
+      agent_planning_content: planning-agent/agent_planning_content
+      agent_planning_result: planning-agent/agent_planning_result
+      crawl4ai_connector_result: crawl4ai-connector-agent/crawl4ai_connector_result
+      selenium_connector_result: selenium-connector-agent/selenium_connector_result
+      agent_planning_scheduler_result: scheduler-agent/agent_planning_scheduler_result
+
+  - id: planning-agent
+    build: pip install -e ../../agent-hub/agent-planning
+    path: agent-planning
+    outputs:
+      - agent_planning_think
+      - agent_planning_content
+      - crawl4ai-connector-url
+      - selenium-connector-url
+      - agent_planning_result
+    inputs:
+      task: terminal-input/data
+    env:
+      IS_DATAFLOW_END: false
+      WRITE_LOG: true
+
+  - id: crawl4ai-connector-agent
+    build: pip install -e ../../agent-hub/crawl4ai-connector
+    path: crawl4ai-connector
+    outputs:
+      - crawl4ai_connector_result
+    inputs:
+      crawl4ai-connector-url: planning-agent/crawl4ai-connector-url
+    env:
+      IS_DATAFLOW_END: false
+      WRITE_LOG: true
+  - id: selenium-connector-agent
+    build: pip install -e ../../agent-hub/selenium-connector
+    path: selenium-connector
+    outputs:
+      - selenium_connector_result
+    inputs:
+      selenium-connector-url: planning-agent/selenium-connector-url
+    env:
+      IS_DATAFLOW_END: false
+      WRITE_LOG: true
+  - id: scheduler-agent
+    build: pip install -e ../../agent-hub/agent-planning-scheduler
+    path: agent-planning-scheduler
+    outputs:
+      - agent_planning_scheduler_result
+    inputs:
+      agent_planning_result: planning-agent/agent_planning_result
+      selenium-connector-url: selenium-connector-agent/selenium_connector_result
+      crawl4ai-connector-url: crawl4ai-connector-agent/crawl4ai_connector_result
+    env:
+      IS_DATAFLOW_END: true
+      WRITE_LOG: true
