@@ -1,8 +1,7 @@
 out/**
 local_cache/**
 data/**
-.env.secret
+agent_deepresearch_planning/.env.secret
 ./**/.env.secret
 ./**/.db
 .env
-.idea
